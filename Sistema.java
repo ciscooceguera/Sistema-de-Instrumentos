@@ -66,28 +66,58 @@ public class Sistema {
         control.altas(llenarInstrumento());
     }
     public Instrumento llenarInstrumento(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese el nombre del instrumento: ");
-        String nombre = sc.nextLine();
-        System.out.println("Ingrese la cita: ");
-        String cita = sc.nextLine();
-        System.out.println("Ingrese la utilidad (MANEJAR/IDENTIFICAR): ");
-        String utilidad = sc.nextLine();
-        System.out.println("Ingrese la condicion (ANSIEDAD/ESTRES: ");
-        String condicion = sc.nextLine();
-        System.out.println("Ingrese el tipo (TEST/CUESTIONARIO/ESCALA: ");
-        String tipo = sc.nextLine();
-        System.out.println("Ingrese el número de autores: ");
-        int numAutores = Integer.parseInt(sc.nextLine());
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del instrumento: ");
+        String cita = JOptionPane.showInputDialog("Ingrese la cita: ");
+        Object[] opcionUtilidad = {"Manejar","Identificar"};
+        int utilidadInt = JOptionPane.showOptionDialog(
+                null,
+                "Seleccione la utilidad","Utilidad",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionUtilidad,
+                opcionUtilidad[0]);
+        String utilidad;
+        if (utilidadInt == 0){
+            utilidad = "Manejar";
+        }else{
+            utilidad = "Identificar";
+        }
+        Object[] opcionCondicion = {"Ansiedad","Estrés"};
+        int condicionInt = JOptionPane.showOptionDialog(
+                null,
+                "Seleccione la condición","Condición",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionCondicion,
+                opcionCondicion[0]);
+        String condicion;
+        if (condicionInt == 0){
+            condicion = "Ansiedad";
+        }else {
+            condicion = "Estrés";
+        }
+        Object[] opcionTipo = {"Test","Cuestionario","Escala"};
+        Object tipoInt = JOptionPane.showInputDialog(null,
+                "Seleccione el tipo", "Tipo",
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                opcionTipo,
+                opcionTipo[1]);
+        String tipo = tipoInt.toString();
+        int numAutores = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de autores: "));
         ArrayList<String> autores = new ArrayList<>();
         for (int i = 0; i < numAutores; i++){
-            System.out.println("Ingrese el nombre del autor: ");
-            autores.add(sc.nextLine());
+            autores.add(JOptionPane.showInputDialog("Ingrese el nombre de autor: "));
         }
-        System.out.println("0. NO Confiable\n1. Confiable\nIngrese si es confiable: ");
-        int confiabilidad = Integer.parseInt(sc.nextLine());
+        int confiabilidad = JOptionPane.showConfirmDialog(null,
+                "Es confiable?",
+                "Confiabilidad",
+                JOptionPane.YES_NO_OPTION);
         return new Instrumento(cita,nombre,utilidad,condicion,tipo,confiabilidad,0,autores);
     }
+
     public Instrumento eliminarInstrumento(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese la clave: ");
