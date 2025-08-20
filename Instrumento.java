@@ -18,6 +18,15 @@ public class Instrumento {
         this.clave = clave;
         this.autores = autores;
     }
+    public String getNombre() {
+        return nombre;
+    }
+    public String getCita() {
+        return cita;
+    }
+    public int getConfiabilidad() {
+        return confiabilidad;
+    }
     public String getPrimerAutor() {
         return autores.getFirst();
     }
@@ -41,6 +50,17 @@ public class Instrumento {
     }
     public String toString(){
         String instrumentoString = "";
+        instrumentoString =  "\nNombre: " + nombre + "\n" +
+                "Clave: " + clave + "\n" +
+                "Cita: " + cita + "\n" +
+                "utilidad: " + utilidad + "\n" +
+                "Condición: " + condicion + "\n" +
+                "Tipo: " + tipo + "\n" +
+                "Confiabilidad: " + confiabilidad + "\n" +
+                "Autores: " + "\n";
+        for (int i = 0; i < autores.size(); i++){
+            instrumentoString += autores.get(i) + "\n";
+        }
         return instrumentoString;
     }
 

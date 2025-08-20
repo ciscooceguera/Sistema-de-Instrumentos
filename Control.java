@@ -1,12 +1,67 @@
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Control {
     private ArrayList<Instrumento> instrumentos;
     public Control(){
         instrumentos = new ArrayList<>();
+        recuperarArchivo();
+    }
+    public void recuperarArchivo(){
+        File archivo = new File("instrumentos.txt");
+        if (!archivo.exists()){
+            return;
+        }
+        try(BufferedReader br = new BufferedReader(new FileReader("instrumentos.txt"))) {
+            String linea;
+            while ((linea = br.readLine()) != null){
+                String[] caracteres = linea.split(",");
+
+                String nombre = caracteres[0];
+                int clave = Integer.parseInt(caracteres[1]);
+                String cita = caracteres[2];
+                String utilidad = caracteres[3];
+                String condicion = caracteres[4];
+                String tipo = caracteres[5];
+                int confiabilidad = Integer.parseInt(caracteres[6]);
+
+                ArrayList<String> autores = new ArrayList<>();
+                String[] autoresStr = caracteres[7].split(";");
+                autores.addAll(Arrays.asList(autoresStr));
+
+                instrumentos.add(new Instrumento(cita,nombre,utilidad,condicion,tipo,confiabilidad,clave,autores));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void actualizarArchivo(){
+        try {
+            FileWriter escritor = new FileWriter("instrumentos.txt", true);
+            for (Instrumento instrumento : instrumentos) {
+                String autoresString = "";
+                for (String autor : instrumento.getAutores()) {
+                    autoresString += autor + ";";
+                }
+                escritor.write(instrumento.getNombre() + "," +
+                        instrumento.getClave() + "," +
+                        instrumento.getCita() + "," +
+                        instrumento.getUtilidad() + "," +
+                        instrumento.getCondicion() + "," +
+                        instrumento.getTipo() + "," +
+                        instrumento.getConfiabilidad() + "," +
+                        autoresString + "\n");
+            }
+            escritor.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void altas(Instrumento instrumento){
         instrumento.setClave(instrumentos.size());
         instrumentos.add(instrumento);
+        actualizarArchivo();
     }
     public Instrumento eliminar(Instrumento instrumento){
         instrumentos.remove(instrumento);
@@ -51,11 +106,20 @@ public class Control {
         }
         return mensajeConsulta;
     }
-    public String consultaPorUtilidad(String utilidad){
+    public String consultarPorUtilidad(String utilidad){
         String mensajeConsulta = "";
         for (Instrumento instrumento : instrumentos) {
             if(instrumento.getUtilidad().equals(utilidad)){
                 mensajeConsulta += instrumento + "\n";
+            }
+        }
+        return mensajeConsulta;
+    }
+    public String consultarPorClave(int clave){
+        String mensajeConsulta = "";
+        for (Instrumento instrumento : instrumentos) {
+            if(instrumento.getClave() == clave){
+                mensajeConsulta = instrumento + "\n";
             }
         }
         return mensajeConsulta;

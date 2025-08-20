@@ -2,12 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Sistema {
     private JFrame ventana;
-    private JButton agregar, eliminar, consulta;
+    private JButton agregar, eliminar, consulta, salir;
     private Control control;
     public Sistema(){
         control = new Control();
@@ -18,7 +19,7 @@ public class Sistema {
         ventana.setTitle("Sistema Integral de Instrumentos");
         ventana.setSize(600,600);
         ventana.setResizable(false);
-        ventana.setLayout(new GridLayout(3,1, 0,10));
+        ventana.setLayout(new GridLayout(4,1, 0,10));
         ventana.setLocationRelativeTo(null);
 
         agregar = new JButton("Agregar");
@@ -39,10 +40,16 @@ public class Sistema {
         consulta.setForeground(Color.WHITE);
         consulta.setFocusPainted(false);
         consulta.setFont(new Font("Arial",Font.BOLD,15));
+        salir = new JButton("Salir");
+        salir.setSize(200,50);
+        salir.setBackground(new Color(70,130,180));
+        salir.setForeground(Color.WHITE);
+        salir.setFocusPainted(false);
+        salir.setFont(new Font("Arial",Font.BOLD,15));
 
         agregar.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                llenarInstrumento();
+                agregarInstrumento();
             }
         });
         eliminar.addActionListener(new ActionListener(){
@@ -55,10 +62,16 @@ public class Sistema {
                 consultar();
             }
         });
+        salir.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        });
 
         ventana.add(agregar);
         ventana.add(eliminar);
         ventana.add(consulta);
+        ventana.add(salir);
 
         ventana.setVisible(true);
     }
@@ -115,50 +128,110 @@ public class Sistema {
                 "Es confiable?",
                 "Confiabilidad",
                 JOptionPane.YES_NO_OPTION);
+        if (confiabilidad == 0){
+            confiabilidad = 1;
+        }else{
+            confiabilidad = 0;
+        }
         return new Instrumento(cita,nombre,utilidad,condicion,tipo,confiabilidad,0,autores);
     }
-
     public Instrumento eliminarInstrumento(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingrese la clave: ");
-        int clave = sc.nextInt();
+        int clave = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la clave del instrumento: "));
         Instrumento instrumento = control.encontrarPorClave(clave);
-        if (instrumento!=null){
+        if (instrumento != null){
             control.eliminar(instrumento);
+        }else{
+            JOptionPane.showMessageDialog(null, "El instrumento no existe");
         }
         return instrumento;
     }
     public void consultar(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("1. Consultar por condición\n2. Consultar por tipo\n3. Consultar por utilidad" +
-                "\n4. Consultar por Autor\n5. Consultar por Clave\nIngrese el tipo de consulta: ");
-        int tipo = Integer.parseInt(sc.nextLine());
-        String consulta;
-        switch (tipo){
-            case 1:
-                System.out.println("Ingrese la condición: ");
-                consulta = sc.nextLine();
-                System.out.println(control.consultarPorCondicion(consulta));
+        Object[] opcConsulta = {"por condición", "por tipo","por utilidad","por autor","por clave"};
+        String consulta = JOptionPane.showInputDialog(null,
+                "Seleccione el tipo de consulta",
+                "Menú consulta",
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                opcConsulta,
+                opcConsulta[0]).toString();
+        String mensaje = "";
+        switch (consulta){
+            case "por condición":
+                Object[] opcionCondicion = {"Ansiedad","Estrés"};
+                int condicionInt = JOptionPane.showOptionDialog(
+                        null,
+                        "Seleccione la condición","Condición",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcionCondicion,
+                        opcionCondicion[0]);
+                String condicion = "";
+                if (condicionInt == 0){
+                    condicion = "Ansiedad";
+                }else {
+                    condicion = "Estrés";
+                }
+                mensaje = control.consultarPorCondicion(condicion);
                 break;
-            case 2:
-                System.out.println("Ingrese el tipo: ");
-                consulta = sc.nextLine();
-                System.out.println(control.consultarPorTipo(consulta));
+            case "por tipo":
+                Object[] opcionTipo = {"Test","Cuestionario","Escala"};
+                int tipoInt = JOptionPane.showOptionDialog(
+                        null,
+                        "Selecciona el tipo","Tipo",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcionTipo,
+                        opcionTipo[0]);
+                String tipo = "";
+                switch (tipoInt){
+                    case 0:
+                        tipo = "Test";
+                        break;
+                    case 1:
+                        tipo = "Cuestionario";
+                        break;
+                    case 2:
+                        tipo = "Escala";
+                        break;
+                }
+                mensaje = control.consultarPorTipo(tipo);
                 break;
-            case 3:
-                System.out.println("Ingrese la utilidad: ");
-                consulta = sc.nextLine();
-                System.out.println(control.consultaPorUtilidad(consulta));
+            case "por utilidad":
+                Object[] opcionUtilidad = {"Manejar","Identificar"};
+                int utilidadInt = JOptionPane.showOptionDialog(
+                        null,
+                        "Selecciona la utilidad","Utilidad",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcionUtilidad,opcionUtilidad[0]);
+                String utilidad = "";
+                if (utilidadInt == 0){
+                    utilidad = "Manejar";
+                }else{
+                    utilidad = "Identificar";
+                }
+                mensaje = control.consultarPorUtilidad(utilidad);
                 break;
-            case 4:
-                System.out.println("Ingrese un autor: ");
-                consulta = sc.nextLine();
-                System.out.println(control.consultarPorAutor(consulta));
+            case "por autor":
+                String nombreAutor = JOptionPane.showInputDialog("Ingrese el nombre de autor: ");
+                mensaje = control.consultarPorAutor(nombreAutor);
                 break;
-            case 5:
-                control.ordenarPorClave();
-                System.out.println(control.consultarTodos());
+            case "por clave":
+                int clave = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la clave del instrumento: "));
+                mensaje = control.consultarPorClave(clave);
                 break;
+        }
+        if (!mensaje.equals("")) {
+            JOptionPane.showMessageDialog(null,
+                    "Instrumentos consultados: " + mensaje, "Consulta,",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null,
+                    "No hubo coincidencias " + mensaje, "Consulta",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
