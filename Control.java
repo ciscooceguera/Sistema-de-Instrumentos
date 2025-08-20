@@ -38,7 +38,7 @@ public class Control {
     }
     public void actualizarArchivo(){
         try {
-            FileWriter escritor = new FileWriter("instrumentos.txt", true);
+            FileWriter escritor = new FileWriter("instrumentos.txt");
             for (Instrumento instrumento : instrumentos) {
                 String autoresString = "";
                 for (String autor : instrumento.getAutores()) {
@@ -59,12 +59,19 @@ public class Control {
         }
     }
     public void altas(Instrumento instrumento){
-        instrumento.setClave(instrumentos.size());
+        int clave = 0;
+        for (Instrumento instrumentoIteracion: instrumentos){
+            if (clave == instrumento.getClave()){
+                clave++;
+            }
+        }
+        instrumento.setClave(clave);
         instrumentos.add(instrumento);
         actualizarArchivo();
     }
     public Instrumento eliminar(Instrumento instrumento){
         instrumentos.remove(instrumento);
+        actualizarArchivo();
         return instrumento;
     }
     public ArrayList<Instrumento> getInstrumentos(){

@@ -96,7 +96,7 @@ public class Sistema {
         }else{
             utilidad = "Identificar";
         }
-        Object[] opcionCondicion = {"Ansiedad","Estrés"};
+        Object[] opcionCondicion = {"Ansiedad","Estrés","Ambos"};
         int condicionInt = JOptionPane.showOptionDialog(
                 null,
                 "Seleccione la condición","Condición",
