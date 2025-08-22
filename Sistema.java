@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Sistema {
     private JFrame ventana;
     private JButton agregar, eliminar, consulta, salir;
@@ -13,6 +10,7 @@ public class Sistema {
     public Sistema(){
         control = new Control();
     }
+    // Inicializa y configura el JFrame y sus componentes
     public void iniciarFrame(){
         ventana = new JFrame();
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,7 +19,6 @@ public class Sistema {
         ventana.setResizable(false);
         ventana.setLayout(new GridLayout(4,1, 0,10));
         ventana.setLocationRelativeTo(null);
-
         agregar = new JButton("Agregar");
         agregar.setSize(200,50);
         agregar.setBackground(new Color(70,130,180));
@@ -46,7 +43,6 @@ public class Sistema {
         salir.setForeground(Color.WHITE);
         salir.setFocusPainted(false);
         salir.setFont(new Font("Arial",Font.BOLD,15));
-
         agregar.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 agregarInstrumento();
@@ -67,17 +63,20 @@ public class Sistema {
                 System.exit(0);
             }
         });
-
         ventana.add(agregar);
         ventana.add(eliminar);
         ventana.add(consulta);
         ventana.add(salir);
-
         ventana.setVisible(true);
     }
+    // Manda a llamar el método de la clase Control altas(),
+    // Mandando como parámetro una instancia de la clase Instrumento la cual es retornada en el
+    // método llenarInstrumento()
     public void agregarInstrumento(){
         control.altas(llenarInstrumento());
     }
+    // Solicita todos los valores de los atributos respectivos a una instancia
+    // de la clase Instrumento, el método retorna el objeto
     public Instrumento llenarInstrumento(){
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre del instrumento: ");
         String cita = JOptionPane.showInputDialog("Ingrese la cita: ");
@@ -135,6 +134,8 @@ public class Sistema {
         }
         return new Instrumento(cita,nombre,utilidad,condicion,tipo,confiabilidad,0,autores);
     }
+    // Elimina un instrumento previamente registrado
+    // lo busca haciendo uso de la clave (atributo)
     public Instrumento eliminarInstrumento(){
         int clave = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la clave del instrumento: "));
         Instrumento instrumento = control.encontrarPorClave(clave);
@@ -145,6 +146,10 @@ public class Sistema {
         }
         return instrumento;
     }
+    /* Te solicita el tipo de consulta que se desea hacer, hay varias opciones
+    en consultas específicas (por tipo, utilidad, etc.) o búsquedas más generales
+    acomodando los instrumentos (por clave o por primer autor)
+     */
     public void consultar(){
         Object[] opcConsulta = {"por condición", "por tipo","por utilidad","por autor","por clave",
                 "consulta general ordenados por clave","consulta general ordenados por primer autor"};

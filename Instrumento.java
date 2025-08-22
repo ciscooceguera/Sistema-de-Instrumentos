@@ -18,6 +18,7 @@ public class Instrumento {
         this.clave = clave;
         this.autores = autores;
     }
+    // Getters
     public String getNombre() {
         return nombre;
     }
@@ -45,9 +46,11 @@ public class Instrumento {
     public int getClave(){
         return clave;
     }
+    // Setter para la clave
     public void setClave(int clave){
         this.clave = clave;
     }
+    // Implementación de toString(), retorna un String
     public String toString(){
         String instrumentoString = "";
         instrumentoString =  "\nNombre: " + nombre + "\n" +
