@@ -146,7 +146,8 @@ public class Sistema {
         return instrumento;
     }
     public void consultar(){
-        Object[] opcConsulta = {"por condición", "por tipo","por utilidad","por autor","por clave"};
+        Object[] opcConsulta = {"por condición", "por tipo","por utilidad","por autor","por clave",
+                "consulta general ordenados por clave","consulta general ordenados por primer autor"};
         String consulta = JOptionPane.showInputDialog(null,
                 "Seleccione el tipo de consulta",
                 "Menú consulta",
@@ -222,6 +223,14 @@ public class Sistema {
             case "por clave":
                 int clave = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la clave del instrumento: "));
                 mensaje = control.consultarPorClave(clave);
+                break;
+            case "consulta general ordenados por clave":
+                control.ordenarPorClave();
+                mensaje = control.consultarTodos();
+                break;
+            case "consulta general ordenados por primer autor":
+                control.ordenarPorPrimerAutor();
+                mensaje = control.consultarTodos();
                 break;
         }
         if (!mensaje.equals("")) {

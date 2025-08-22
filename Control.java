@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Control {
     private ArrayList<Instrumento> instrumentos;
@@ -143,7 +144,6 @@ public class Control {
         return mensajeConsulta;
     }
     public void ordenarPorClave(){
-        instrumentos.sort((o1, o2) ->
-                o1.getClave());
+        instrumentos.sort(Comparator.comparingInt(Instrumento::getClave));
     }
 }
