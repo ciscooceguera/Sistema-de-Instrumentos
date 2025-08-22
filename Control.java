@@ -78,8 +78,9 @@ public class Control {
      */
     public void altas(Instrumento instrumento){
         int clave = 0;
+        ordenarPorClave();
         for (Instrumento instrumentoIteracion: instrumentos){
-            if (clave == instrumento.getClave()){
+            if (clave == instrumentoIteracion.getClave()){
                 clave++;
             }
         }
